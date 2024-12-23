@@ -12,6 +12,17 @@ string trim(const string& str) {
     return (first == string::npos || last == string::npos) ? "" : str.substr(first, last - first + 1);
 }
 
+// Function to split a string by a delimiter
+vector<string> split(const string& str, char delimiter) {
+    vector<string> tokens;
+    string token;
+    istringstream tokenStream(str);
+    while (getline(tokenStream, token, delimiter)) {
+        tokens.push_back(trim(token));
+    }
+    return tokens;
+}
+
 // Function to write output to both file and console
 void writeOutput(ofstream& outputFile, const string& content) {
     outputFile << "> " << content << endl;
@@ -48,7 +59,6 @@ int main() {
 
         writeOutput(outputFile, line);
 
-        // Handle table creation
         if (line.find("CREATE TABLE") != string::npos) {
             getline(inputFile, line); // Skip "(" line
             line = trim(line);
@@ -60,7 +70,10 @@ int main() {
                     writeOutput(outputFile, line);
                     break;
                 }
-                columnHeaders.push_back(line.substr(0, line.find(" ")));
+                size_t spacePos = line.find(" ");
+                if (spacePos != string::npos) {
+                    columnHeaders.push_back(line.substr(0, spacePos)); // Extract column name
+                }
                 writeOutput(outputFile, line);
             }
         }
@@ -68,15 +81,46 @@ int main() {
         // Handle INSERT statements
         if (line.find("INSERT INTO") != string::npos) {
             size_t valuesPos = line.find("VALUES (");
-            if (valuesPos != string::npos) {
+            if (valuesPos == string::npos) {
+                cerr << "ERROR: 'VALUES (' not found in line: " << line << endl;
+            } else {
                 string values = line.substr(valuesPos + 8); // Extract values after "VALUES ("
+
                 values.pop_back(); // Remove trailing ')'
-                tableData.push_back(values); // Store the entire row
+
+                vector<string> parsedValues = split(values, ',');
+
+
+                // Remove single quotes from parsed values
+                for (auto& value : parsedValues) {
+                    if (value.front() == '\'') value = value.substr(1, value.size() - 2);
+                }
+
+                string joinedValues = "";
+                for (size_t i = 0; i < parsedValues.size(); ++i) {
+                    if (i > 0) joinedValues += ",";
+                    joinedValues += parsedValues[i];
+                }
+
+                tableData.push_back(joinedValues);
             }
         }
 
+
         // Handle SELECT * FROM statements
         if (line.find("SELECT * FROM") != string::npos) {
+            // Ensure columnHeaders contains all column names
+            if (columnHeaders.empty()) {
+                cerr << "Error: No column headers found before SELECT statement." << endl;
+                continue;
+            }
+
+            for (const auto& header : columnHeaders) {
+                cout << header << " ";
+            }
+            cout << endl;
+
+
             // Output the column headers
             string headerLine = "";
             for (const auto& header : columnHeaders) {
@@ -94,7 +138,5 @@ int main() {
 
     inputFile.close();
     outputFile.close();
-
-    cout << "Processing completed. Output written to " << outputFilename << endl;
     return 0;
 }
