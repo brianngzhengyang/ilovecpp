@@ -1,0 +1,162 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <map>
+using namespace std;
+
+// Function to trim spaces from a string
+string trim(const string& str) {
+    size_t first = str.find_first_not_of(" ");
+    size_t last = str.find_last_not_of(" ");
+    return (first == string::npos || last == string::npos) ? "" : str.substr(first, last - first + 1);
+}
+
+// Function to split a string by a delimiter
+vector<string> split(const string& str, char delimiter) {
+    vector<string> tokens;
+    string token;
+    istringstream tokenStream(str);
+    while (getline(tokenStream, token, delimiter)) {
+        tokens.push_back(trim(token));
+    }
+    return tokens;
+}
+
+// Function to escape CSV values
+string escapeCsvValue(const string& value) {
+    if (value.find(',') != string::npos || value.find('"') != string::npos) {
+        string escaped = "\"";
+        for (char c : value) {
+            if (c == '"') escaped += "\"\"";
+            else escaped += c;
+        }
+        escaped += "\"";
+        return escaped;
+    }
+    return value;
+}
+
+// Function to write output to both file and console
+void writeOutput(ofstream& outputFile, const string& content) {
+    outputFile << "> " << content << endl;
+    cout << "> " << content << endl;
+}
+
+// Function to print the table in CSV format
+void select_all_from_table_in_csv_mode(ofstream& outputFile, const vector<string>& columnHeaders, const vector<string>& tableData) {
+    if (columnHeaders.empty() || tableData.empty()) {
+        cerr << "Error: No data available to output in CSV format." << endl;
+        return;
+    }
+
+    // Print column headers as the first row in CSV
+    string csvLine = "";
+    for (size_t i = 0; i < columnHeaders.size(); ++i) {
+        if (i > 0) csvLine += ",";
+        csvLine += escapeCsvValue(columnHeaders[i]);
+    }
+    writeOutput(outputFile, csvLine);
+
+    // Print each row in the tableData
+    for (const auto& row : tableData) {
+        string formattedRow = "";
+        vector<string> values = split(row, ',');
+        for (size_t i = 0; i < values.size(); ++i) {
+            if (i > 0) formattedRow += ",";
+            formattedRow += escapeCsvValue(values[i]);
+        }
+        writeOutput(outputFile, formattedRow);
+    }
+}
+
+int main(int argc, char* argv[]) {
+    string inputFilename = (argc > 1) ? argv[1] : "fileInput1.mdb";
+    string outputFilename = (argc > 2) ? argv[2] : "fileOutput1.txt";
+
+    ifstream inputFile(inputFilename);
+    ofstream outputFile(outputFilename);
+
+    if (!inputFile.is_open()) {
+        cerr << "Error: Could not open input file: " << inputFilename << endl;
+        return 1;
+    }
+
+    if (!outputFile.is_open()) {
+        cerr << "Error: Could not create output file: " << outputFilename << endl;
+        return 1;
+    }
+
+    string line;
+    vector<string> tableData;
+    vector<string> columnHeaders;
+
+    writeOutput(outputFile, "CREATE " + outputFilename + ";");
+
+    while (getline(inputFile, line)) {
+        line = trim(line);
+
+        if (line.empty()) continue;
+
+        writeOutput(outputFile, line);
+
+        // Handle table creation
+        if (line.find("CREATE TABLE") != string::npos) {
+            getline(inputFile, line); // Skip "(" line
+            line = trim(line);
+            writeOutput(outputFile, line);
+
+            while (getline(inputFile, line)) {
+                line = trim(line);
+                if (line.find(")") != string::npos) {
+                    writeOutput(outputFile, line);
+                    break;
+                }
+                size_t spacePos = line.find(" ");
+                if (spacePos != string::npos) {
+                    columnHeaders.push_back(line.substr(0, spacePos)); // Extract column name
+                }
+                writeOutput(outputFile, line);
+            }
+        }
+
+        // Handle INSERT statements
+        if (line.find("INSERT INTO") != string::npos) {
+            size_t valuesPos = line.find("VALUES (");
+            if (valuesPos == string::npos) {
+                cerr << "ERROR: 'VALUES (' not found in line: " << line << endl;
+            } else {
+                string values = line.substr(valuesPos + 8); // Extract values after "VALUES ("
+
+                values.pop_back(); // Remove trailing ')'
+
+                vector<string> parsedValues = split(values, ',');
+
+                // Remove single quotes from parsed values
+                for (auto& value : parsedValues) {
+                    if (!value.empty() && value.front() == '\'' && value.back() == '\'') {
+                        value = value.substr(1, value.size() - 2);
+                    }
+                }
+
+                string joinedValues = "";
+                for (size_t i = 0; i < parsedValues.size(); ++i) {
+                    if (i > 0) joinedValues += ",";
+                    joinedValues += parsedValues[i];
+                }
+
+                tableData.push_back(joinedValues);
+            }
+        }
+
+        // Handle SELECT * FROM statements
+        if (line.find("SELECT * FROM") != string::npos) {
+            select_all_from_table_in_csv_mode(outputFile, columnHeaders, tableData);
+        }
+    }
+
+    inputFile.close();
+    outputFile.close();
+    return 0;
+}

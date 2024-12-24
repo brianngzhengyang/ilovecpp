@@ -45,8 +45,8 @@ void writeOutput(ofstream& fileOutput, const string& content) {
 }
 
 int main() {
-    ofstream fileOutput;
     string fileOutputName;
+    ofstream fileOutput(fileOutputName);
 
     vector<vector<string>> table;
     string tableName;
@@ -104,7 +104,7 @@ int main() {
 
     fileInput.close();
     fileOutput.close();
-    return 0;
+    cout << "Processing completed. Output written to " << fileOutputName << endl;
 }
 
 // function definitions
@@ -160,4 +160,10 @@ void select_all_from_table_in_csv_mode(ofstream& fileOutput) {
     writeOutput(fileOutput, "2,meor,city2,state2,country2,phone2,email2");
     writeOutput(fileOutput, "3,alif,city3,state3,country3,phone3,email3");
     writeOutput(fileOutput, "4,aman,city4,state4,country4,phone4,email4");
+}
+
+
+void writeOutput(ofstream& fileOutput, const string& content) {
+    fileOutput << "> " << content << endl;
+    cout << "> " << content << endl;
 }
