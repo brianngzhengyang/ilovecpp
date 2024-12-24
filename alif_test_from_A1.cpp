@@ -20,7 +20,7 @@ void writeOutput(ofstream& outputFile, const string& content) {
 }
 
 int main() {
-    string inputFilename="C:\\Users\\USER\\OneDrive\\Documents\\GitHub\\ilovecpp\\fileInput1.mdb";
+    string inputFilename="C:\\Users\\brian\\Desktop\\ilovecpp\\fileInput1.mdb";
     string outputFilename = "fileOutput1.txt";
 
     ifstream inputFile(inputFilename);
@@ -62,7 +62,7 @@ int main() {
             continue;
         } // alif test part //
 
-        
+
 
         // Handle table creation
         if (line.find("CREATE TABLE") != string::npos) {

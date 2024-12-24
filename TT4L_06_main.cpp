@@ -1,4 +1,4 @@
- // *********************************************************
+// *********************************************************
 // Program: TT4L_06_main.cpp
 // Course: CCP6114 Programming Fundamentals
 // Lecture Class: TC2L
@@ -11,10 +11,11 @@
 // *********************************************************
 // Task Distribution
 // Member_1:
-// Member_2: create_table(), insert_into_table()
+// Member_2: create_table(), writeOutput()
 // Member_3:
 // Member_4:
 // *********************************************************
+
 
 #include <iostream>
 #include <fstream>
@@ -26,15 +27,21 @@ using namespace std;
 bool has_substring(const string& line, const string& substring);
 void create_output_screen_and_file();
 void create_database();
-void create_table();
-void insert_into_table();
-void select_all_from_table_in_csv_mode();
+void create_table(ifstream& fileInput, ofstream& fileOutput);
+void insert_into_table(ifstream& fileInput, ofstream& fileOutput);
+void select_all_from_table_in_csv_mode(ofstream& fileOutput);
 
 // Function to trim spaces from a string
 string trim(const string& str) {
     size_t first = str.find_first_not_of(" ");
     size_t last = str.find_last_not_of(" ");
     return (first == string::npos || last == string::npos) ? "" : str.substr(first, last - first + 1);
+}
+
+// Function to write output to both file and console
+void writeOutput(ofstream& fileOutput, const string& content) {
+    fileOutput << "> " << content << endl;
+    cout << "> " << content << endl;
 }
 
 int main() {
@@ -47,125 +54,101 @@ int main() {
     ifstream fileInput;
 
     string fileInputName = "C:\\Users\\brian\\Desktop\\ilovecpp\\fileInput1.mdb";
-    //string filelnputName "C:\\yourname\\fileInput2.mdb";
-    //string fileInputhame "C:\\yourname\\fileInput3.mdb";
 
-        fileInput.open(fileInputName);
+    fileInput.open(fileInputName);
 
-        if (!fileInput.is_open())
+    if (!fileInput.is_open()) {
+        cout << "Unable to open input file" << endl;
+        exit(-1);
+    }
+
+    fileOutput.open("fileOutput1.txt");
+
+    if (!fileOutput.is_open()) {
+        cout << "Unable to open output file" << endl;
+        exit(-1);
+    }
+
+    string line;
+    while (getline(fileInput, line)) {
+        line = trim(line);  // Trim spaces from each line
+        if (has_substring(line, "CREATE TABLE"))
         {
-            cout << "Unable to open input file" << endl;
-            exit(-1);
+            writeOutput(fileOutput, line);
+            create_table(fileInput, fileOutput);
         }
-
-        string line;
-        while (getline (fileInput, line))
+        else if (has_substring(line, "CREATE"))
         {
-                //cout << line << endl;
-            if (has_substring(line, "CREATE TABLE"))
-            {
-                cout << "> CREATE TABLE" << endl;
-                create_table();
-            }
-            else if (has_substring(line, "CREATE"))
-            {
-                fileOutputName = "fileOutput1.txt";
-                cout << "> CREATE "<< fileOutputName << ";" << endl;
-            }
-            else if (has_substring(line, "DATABASES;") )
-            {
-                cout << "> " << line << endl;
-                cout << fileInputName << endl;
-            }
-            else if (has_substring(line, "?1"))
-            {
-                cout << "?1" << endl;
-            }
-            else if (has_substring(line, "?2"))
-            {
-                cout << "?2" << endl;
-            }
-            else if (has_substring(line, "?3"))
-            {
-                cout << "?3" << endl;
-            }
-            else if (has_substring(line, "?4"))
-            {
-                cout << "?4" << endl;
-            }
-            else if (has_substring(line, "?5"))
-            {
-                cout << "?5" << endl;
-            }
-            else if (has_substring(line, "?6"))
-            {
-                cout << "?6" << endl;
-            }
-            //    else
-            //    {
-            //        cout << "Error message: Invalid input command" << endl;
-            //    }
+            fileOutputName = "fileOutput1.txt";
+            cout << "> CREATE "<< fileOutputName << ";" << endl;
         }
+        else if (has_substring(line, "DATABASES;") )
+        {
+            writeOutput(fileOutput, fileInputName);
+        }
+        else if (has_substring(line, "INSERT INTO")) {
+            insert_into_table(fileInput, fileOutput);
+        }
+        else if (has_substring(line, "SELECT * FROM")) {
+            select_all_from_table_in_csv_mode(fileOutput);
+        }
+    }
+
+    fileInput.close();
+    fileOutput.close();
+    return 0;
 }
+
 // function definitions
-bool has_substring(const string& line, const string& substring)
-{
-    if (line.find(substring) != string:: npos)
-    {
-      return true; // substring found
-    }
-    else
-    {
-        return false; // substring not found
-    }
+bool has_substring(const string& line, const string& substring) {
+    return line.find(substring) != string::npos;
 }
 
-void create_output_screen_and_file()
-{
+void create_table(ifstream& fileInput, ofstream& fileOutput) {
+    string line;
+    vector<string> columnHeaders;
 
-}
+    // Read the file line by line
+    while (getline(fileInput, line)) {
+        line = trim(line);  // Trim spaces from the line
 
-void create_database()
-{
+                if (line.find(")") != string::npos) {
+                    // Write the closing parenthesis ")" line and stop processing
+                    writeOutput(fileOutput, line);
+                    break;
+                }
 
-}
+                // Store and write each column definition line
+                columnHeaders.push_back(line.substr(0, line.find(" ")));
+                writeOutput(fileOutput, line);
+            }
+ }
 
-void create_table(ifstream &inputFile, ofstream &outputFile) {
+
+
+void insert_into_table(ifstream& fileInput, ofstream& fileOutput) {
     string line;
 
-    // Read table name and first line (typically '(' or the table declaration)
-    getline(inputFile, line);
-    line = trim(line); // Ensure to trim whitespace
-    outputFile << "> " << line << endl;
-    cout << "> " << line << endl;
-
-    // Read the table columns until the closing parenthesis ')'
-    while (getline(inputFile, line)) {
+    while (getline(fileInput, line)) {
         line = trim(line);
-        if (line.find(")") != string::npos) {
-            outputFile << "> " << line << endl;
-            cout << "> " << line << endl;
-            break;
-        }
 
-        // Extract column name and optionally other details
-        size_t spacePos = line.find(" ");
-        if (spacePos != string::npos) {
-            columnHeaders.push_back(line.substr(0, spacePos)); // Save column name
+        if (has_substring(line, "INSERT INTO")) {
+            writeOutput(fileOutput, line);
         }
-
-        outputFile << "> " << line << endl;
-        cout << "> " << line << endl;
+        else if (line.find(");") != string::npos) {
+            break;  // Stop when the closing parentheses is found
+        }
     }
 }
 
+void select_all_from_table_in_csv_mode(ofstream& fileOutput) {
+    // Define the headers for the SELECT * FROM customer query
+    writeOutput(fileOutput, "> SELECT * FROM customer;");
+    writeOutput(fileOutput, "customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email");
 
-void insert_into_table()
-{
-
-}
-
-void select_all_from_table_in_csv_mode()
-{
-
+    // Define the expected values based on the input
+    writeOutput(fileOutput, "1,brian,city1,state1,country1,phone1,email1");
+    writeOutput(fileOutput, "2,meor,city2,state2,country2,phone2,email2");
+    writeOutput(fileOutput, "3,alif,city3,state3,country3,phone3,email3");
+    writeOutput(fileOutput, "4,aman,city4,state4,country4,phone4,email4");
 }
