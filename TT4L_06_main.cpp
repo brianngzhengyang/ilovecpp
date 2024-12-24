@@ -27,7 +27,7 @@ using namespace std;
 bool has_substring(const string& line, const string& substring);
 void create_output_screen_and_file();
 void create_database();
-void create_table(ifstream& fileInput, ofstream& fileOutput);
+void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName);
 void insert_into_table(ifstream& fileInput, ofstream& fileOutput);
 void select_all_from_table_in_csv_mode(ofstream& fileOutput);
 
@@ -75,7 +75,15 @@ int main() {
         if (has_substring(line, "CREATE TABLE"))
         {
             writeOutput(fileOutput, line);
-            create_table(fileInput, fileOutput);
+
+            // Extract the table name
+            size_t pos = line.find("CREATE TABLE");
+            if (pos != string::npos) {
+                tableName = line.substr(pos + 12, line.find("(") - (pos + 12));  // Extract table name
+                tableName = trim(tableName);  // Trim spaces from the table name
+            }
+
+            create_table(fileInput, fileOutput, tableName);
         }
         else if (has_substring(line, "CREATE"))
         {
@@ -104,7 +112,7 @@ bool has_substring(const string& line, const string& substring) {
     return line.find(substring) != string::npos;
 }
 
-void create_table(ifstream& fileInput, ofstream& fileOutput) {
+void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName) {
     string line;
     vector<string> columnHeaders;
 
@@ -112,9 +120,10 @@ void create_table(ifstream& fileInput, ofstream& fileOutput) {
     while (getline(fileInput, line)) {
         line = trim(line);  // Trim spaces from the line
 
-                if (line.find(")") != string::npos) {
-                    // Write the closing parenthesis ")" line and stop processing
+                if (line.find("TABLES;") != string::npos) {
+
                     writeOutput(fileOutput, line);
+                    writeOutput(fileOutput, tableName);
                     break;
                 }
 
