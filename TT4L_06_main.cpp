@@ -11,7 +11,7 @@
 // *********************************************************
 // Task Distribution
 // Member_1:
-// Member_2:
+// Member_2: create_table(), insert_into_table()
 // Member_3:
 // Member_4:
 // *********************************************************
@@ -23,12 +23,19 @@
 using namespace std;
 
 // function prototypes
-bool has substring(const string& line, const string& substring);
-void create output screen and file();
+bool has_substring(const string& line, const string& substring);
+void create_output_screen_and_file();
 void create_database();
-void create table();
+void create_table();
 void insert_into_table();
-void select all_from table_in csv mode();
+void select_all_from_table_in_csv_mode();
+
+// Function to trim spaces from a string
+string trim(const string& str) {
+    size_t first = str.find_first_not_of(" ");
+    size_t last = str.find_last_not_of(" ");
+    return (first == string::npos || last == string::npos) ? "" : str.substr(first, last - first + 1);
+}
 
 int main() {
     ofstream fileOutput;
@@ -39,7 +46,7 @@ int main() {
 
     ifstream fileInput;
 
-    string fileInputName "C:\\yourname\\fiininputi.mdb":
+    string fileInputName = "C:\\Users\\brian\\Desktop\\ilovecpp\\fileInput1.mdb";
     //string filelnputName "C:\\yourname\\fileInput2.mdb";
     //string fileInputhame "C:\\yourname\\fileInput3.mdb";
 
@@ -55,19 +62,20 @@ int main() {
         while (getline (fileInput, line))
         {
                 //cout << line << endl;
-            if (has_substring(line, "CREATE TABLE") )
+            if (has_substring(line, "CREATE TABLE"))
             {
-                cout << "? CREATE TABLE" << endl;
+                cout << "> CREATE TABLE" << endl;
+                create_table();
             }
             else if (has_substring(line, "CREATE"))
             {
-                fileOutputName = "?";
-                cout << "> CREATE << fileOutputName << ";" << endl;
+                fileOutputName = "fileOutput1.txt";
+                cout << "> CREATE "<< fileOutputName << ";" << endl;
             }
             else if (has_substring(line, "DATABASES;") )
             {
-                cout << "> " <<< line << endl;
-                cout << "?" << endl;
+                cout << "> " << line << endl;
+                cout << fileInputName << endl;
             }
             else if (has_substring(line, "?1"))
             {
@@ -112,7 +120,7 @@ bool has_substring(const string& line, const string& substring)
     }
 }
 
-void create output screen and file()
+void create_output_screen_and_file()
 {
 
 }
@@ -122,17 +130,42 @@ void create_database()
 
 }
 
-void create table()
-{
+void create_table(ifstream &inputFile, ofstream &outputFile) {
+    string line;
 
+    // Read table name and first line (typically '(' or the table declaration)
+    getline(inputFile, line);
+    line = trim(line); // Ensure to trim whitespace
+    outputFile << "> " << line << endl;
+    cout << "> " << line << endl;
+
+    // Read the table columns until the closing parenthesis ')'
+    while (getline(inputFile, line)) {
+        line = trim(line);
+        if (line.find(")") != string::npos) {
+            outputFile << "> " << line << endl;
+            cout << "> " << line << endl;
+            break;
+        }
+
+        // Extract column name and optionally other details
+        size_t spacePos = line.find(" ");
+        if (spacePos != string::npos) {
+            columnHeaders.push_back(line.substr(0, spacePos)); // Save column name
+        }
+
+        outputFile << "> " << line << endl;
+        cout << "> " << line << endl;
+    }
 }
+
 
 void insert_into_table()
 {
 
 }
 
-void select all_from table_in csv mode()
+void select_all_from_table_in_csv_mode()
 {
 
 }
