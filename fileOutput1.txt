@@ -24,3 +24,4 @@
 > customer(customer_id,customer_name,customer_city,customer_state,customer_country,custom
 > er_phone,customer_email) VALUES (4,'aman','city4','state4','country4','phone4','email4');
 > SELECT * FROM customer;
+C:\Users\USER\OneDrive\Documents\GitHub\ilovecpp\fileInput1.mdb

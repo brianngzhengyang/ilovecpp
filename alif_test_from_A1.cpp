@@ -20,7 +20,7 @@ void writeOutput(ofstream& outputFile, const string& content) {
 }
 
 int main() {
-    string inputFilename = "fileInput1.mdb";
+    string inputFilename="C:\\Users\\USER\\OneDrive\\Documents\\GitHub\\ilovecpp\\fileInput1.mdb";
     string outputFilename = "fileOutput1.txt";
 
     ifstream inputFile(inputFilename);

@@ -37,7 +37,7 @@ int main() {
     vector<vector<string>> table;
     string tableName;
 
-    ifstrean fileInput;
+    ifstream fileInput;
 
     string fileInputName "C:\\yourname\\fiininputi.mdb":
     //string filelnputName "C:\\yourname\\fileInput2.mdb";
