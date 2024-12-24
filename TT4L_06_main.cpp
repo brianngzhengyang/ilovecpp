@@ -11,7 +11,7 @@
 // *********************************************************
 // Task Distribution
 // Member_1:
-// Member_2:
+// Member_2: create_table(), insert_into_table()
 // Member_3:
 // Member_4:
 // *********************************************************
@@ -23,12 +23,12 @@
 using namespace std;
 
 // function prototypes
-bool has substring(const string& line, const string& substring);
-void create output screen and file();
+bool has_substring(const string& line, const string& substring);
+void create_output_screen_and_file();
 void create_database();
-void create table();
+void create_table();
 void insert_into_table();
-void select all_from table_in csv mode();
+void select_all_from_table_in_csv_mode();
 
 int main() {
     ofstream fileOutput;
@@ -37,9 +37,9 @@ int main() {
     vector<vector<string>> table;
     string tableName;
 
-    ifstrean fileInput;
+    ifstream fileInput;
 
-    string fileInputName "C:\\yourname\\fiininputi.mdb":
+    string fileInputName = "C:\\Users\\brian\\Desktop\\ilovecpp\\fileInput1.mdb";
     //string filelnputName "C:\\yourname\\fileInput2.mdb";
     //string fileInputhame "C:\\yourname\\fileInput3.mdb";
 
@@ -62,12 +62,12 @@ int main() {
             else if (has_substring(line, "CREATE"))
             {
                 fileOutputName = "?";
-                cout << "> CREATE << fileOutputName << ";" << endl;
+                cout << "> CREATE "<< fileOutputName << ";" << endl;
             }
             else if (has_substring(line, "DATABASES;") )
             {
-                cout << "> " <<< line << endl;
-                cout << "?" << endl;
+                cout << "> " << line << endl;
+                cout << fileInputName << endl;
             }
             else if (has_substring(line, "?1"))
             {
@@ -112,7 +112,7 @@ bool has_substring(const string& line, const string& substring)
     }
 }
 
-void create output screen and file()
+void create_output_screen_and_file()
 {
 
 }
@@ -122,7 +122,7 @@ void create_database()
 
 }
 
-void create table()
+void create_table()
 {
 
 }
@@ -132,7 +132,7 @@ void insert_into_table()
 
 }
 
-void select all_from table_in csv mode()
+void select_all_from_table_in_csv_mode()
 {
 
 }
