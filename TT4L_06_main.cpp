@@ -30,6 +30,13 @@ void create_table();
 void insert_into_table();
 void select_all_from_table_in_csv_mode();
 
+// Function to trim spaces from a string
+string trim(const string& str) {
+    size_t first = str.find_first_not_of(" ");
+    size_t last = str.find_last_not_of(" ");
+    return (first == string::npos || last == string::npos) ? "" : str.substr(first, last - first + 1);
+}
+
 int main() {
     ofstream fileOutput;
     string fileOutputName;
@@ -55,13 +62,14 @@ int main() {
         while (getline (fileInput, line))
         {
                 //cout << line << endl;
-            if (has_substring(line, "CREATE TABLE") )
+            if (has_substring(line, "CREATE TABLE"))
             {
-                cout << "? CREATE TABLE" << endl;
+                cout << "> CREATE TABLE" << endl;
+                create_table();
             }
             else if (has_substring(line, "CREATE"))
             {
-                fileOutputName = "?";
+                fileOutputName = "fileOutput1.txt";
                 cout << "> CREATE "<< fileOutputName << ";" << endl;
             }
             else if (has_substring(line, "DATABASES;") )
@@ -122,10 +130,35 @@ void create_database()
 
 }
 
-void create_table()
-{
+void create_table(ifstream &inputFile, ofstream &outputFile) {
+    string line;
 
+    // Read table name and first line (typically '(' or the table declaration)
+    getline(inputFile, line);
+    line = trim(line); // Ensure to trim whitespace
+    outputFile << "> " << line << endl;
+    cout << "> " << line << endl;
+
+    // Read the table columns until the closing parenthesis ')'
+    while (getline(inputFile, line)) {
+        line = trim(line);
+        if (line.find(")") != string::npos) {
+            outputFile << "> " << line << endl;
+            cout << "> " << line << endl;
+            break;
+        }
+
+        // Extract column name and optionally other details
+        size_t spacePos = line.find(" ");
+        if (spacePos != string::npos) {
+            columnHeaders.push_back(line.substr(0, spacePos)); // Save column name
+        }
+
+        outputFile << "> " << line << endl;
+        cout << "> " << line << endl;
+    }
 }
+
 
 void insert_into_table()
 {
