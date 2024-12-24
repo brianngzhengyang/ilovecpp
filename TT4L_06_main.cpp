@@ -29,6 +29,7 @@ void create_database();
 void create_table();
 void insert_into_table();
 void select_all_from_table_in_csv_mode();
+void writeOutput(ofstream& outputFile, const string& content);
 
 // Function to trim spaces from a string
 string trim(const string& str) {
@@ -38,8 +39,8 @@ string trim(const string& str) {
 }
 
 int main() {
-    ofstream fileOutput;
     string fileOutputName;
+    ofstream fileOutput(fileOutputName);
 
     vector<vector<string>> table;
     string tableName;
@@ -67,15 +68,14 @@ int main() {
                 cout << "> CREATE TABLE" << endl;
                 create_table();
             }
-            else if (has_substring(line, "CREATE"))
+            else if (has_substring(line, "CREATE fileOutput1.txt"))
             {
-                fileOutputName = "fileOutput1.txt";
-                cout << "> CREATE "<< fileOutputName << ";" << endl;
+                void create_output_screen_and_file();
             }
             else if (has_substring(line, "DATABASES;") )
             {
-                cout << "> " << line << endl;
-                cout << fileInputName << endl;
+                create_database();
+                cout << "> CREATE DATABASE "<< ";" << endl;
             }
             else if (has_substring(line, "?1"))
             {
@@ -106,7 +106,14 @@ int main() {
             //        cout << "Error message: Invalid input command" << endl;
             //    }
         }
+        fileInput.close();
+        fileOutput.close();
+
+        cout << "Processing completed. Output written to " << fileOutputName << endl;
+        return 0;
 }
+
+
 // function definitions
 bool has_substring(const string& line, const string& substring)
 {
@@ -122,12 +129,17 @@ bool has_substring(const string& line, const string& substring)
 
 void create_output_screen_and_file()
 {
-
+    string fileOutputName;
+    fileOutputName = "fileOutput1.txt";
+    cout << "> CREATE "<< fileOutputName << ";" << endl;
 }
 
 void create_database()
 {
-
+    string fileOutputName;
+    string fileInputName = "C:\\Users\\brian\\Desktop\\ilovecpp\\fileInput1.mdb";
+    ofstream fileOutput(fileOutputName);
+    writeOutput(fileOutput, "C:\\mariadb\\" + fileInputName);
 }
 
 void create_table(ifstream &inputFile, ofstream &outputFile) {
@@ -168,4 +180,10 @@ void insert_into_table()
 void select_all_from_table_in_csv_mode()
 {
 
+}
+
+
+void writeOutput(ofstream& fileOutput, const string& content) {
+    fileOutput << "> " << content << endl;
+    cout << "> " << content << endl;
 }
