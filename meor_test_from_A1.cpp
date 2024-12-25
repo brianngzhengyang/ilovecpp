@@ -53,7 +53,7 @@ int main() {
 
     ifstream fileInput;
 
-    string fileInputName = "C:\\Users\\brian\\Desktop\\ilovecpp\\fileInput1.mdb";
+    string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput1.mdb";
 
     fileInput.open(fileInputName);
 
