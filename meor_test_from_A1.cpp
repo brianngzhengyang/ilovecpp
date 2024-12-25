@@ -11,7 +11,7 @@
 // *********************************************************
 // Task Distribution
 // Member_1:
-// Member_2: create_table(), writeOutput()
+// Member_2: create_table(), create_output_screen_and_file()
 // Member_3:
 // Member_4:
 // *********************************************************
@@ -28,7 +28,7 @@ bool has_substring(const string& line, const string& substring);
 void create_output_screen_and_file();
 void create_database();
 void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName);
-void insert_into_table(ifstream& fileInput, ofstream& fileOutput);
+void insert_into_table(const string& firstLine, ifstream& fileInput, ofstream& fileOutput);
 void select_all_from_table_in_csv_mode(ofstream& fileOutput);
 
 // Function to trim spaces from a string
@@ -39,7 +39,7 @@ string trim(const string& str) {
 }
 
 // Function to write output to both file and console
-void writeOutput(ofstream& fileOutput, const string& content) {
+void create_output_screen_and_file(ofstream& fileOutput, const string& content) {
     fileOutput << "> " << content << endl;
     cout << "> " << content << endl;
 }
@@ -71,36 +71,32 @@ int main() {
 
     string line;
     while (getline(fileInput, line)) {
-        line = trim(line);  // Trim spaces from each line
-        if (has_substring(line, "CREATE TABLE"))
-        {
-            writeOutput(fileOutput, line);
+    line = trim(line);  // Trim spaces from each line
 
-            // Extract the table name
-            size_t pos = line.find("CREATE TABLE");
-            if (pos != string::npos) {
-                tableName = line.substr(pos + 12, line.find("(") - (pos + 12));  // Extract table name
-                tableName = trim(tableName);  // Trim spaces from the table name
-            }
+    if (has_substring(line, "CREATE TABLE")) {
+        create_output_screen_and_file(fileOutput, line);
 
-            create_table(fileInput, fileOutput, tableName);
+        // Extract the table name
+        size_t pos = line.find("CREATE TABLE");
+        if (pos != string::npos) {
+            tableName = line.substr(pos + 12, line.find("(") - (pos + 12));  // Extract table name
+            tableName = trim(tableName);  // Trim spaces from the table name
         }
-        else if (has_substring(line, "CREATE"))
-        {
+
+        create_table(fileInput, fileOutput, tableName);
+        } else if (has_substring(line, "CREATE")) {
             fileOutputName = "fileOutput1.txt";
-            cout << "> CREATE "<< fileOutputName << ";" << endl;
-        }
-        else if (has_substring(line, "DATABASES;") )
-        {
-            writeOutput(fileOutput, fileInputName);
-        }
-        else if (has_substring(line, "INSERT INTO")) {
-            insert_into_table(fileInput, fileOutput);
-        }
-        else if (has_substring(line, "SELECT * FROM")) {
+            cout << "> CREATE " << fileOutputName << ";" << endl;
+        } else if (has_substring(line, "DATABASES;")) {
+            cout << "> DATABASES;" << endl;
+            create_output_screen_and_file(fileOutput, fileInputName);
+        } else if (has_substring(line, "INSERT INTO")) {
+            insert_into_table(line, fileInput, fileOutput); // Pass the current line
+        } else if (has_substring(line, "SELECT * FROM")) {
             select_all_from_table_in_csv_mode(fileOutput);
         }
     }
+
 
     fileInput.close();
     fileOutput.close();
@@ -122,53 +118,55 @@ void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName) 
 
                 if (line.find("TABLES;") != string::npos) {
 
-                    writeOutput(fileOutput, line);
-                    writeOutput(fileOutput, tableName);
+                    create_output_screen_and_file(fileOutput, line);
+                    create_output_screen_and_file(fileOutput, tableName);
                     break;
                 }
 
                 // Store and write each column definition line
                 columnHeaders.push_back(line.substr(0, line.find(" ")));
-                writeOutput(fileOutput, line);
+                create_output_screen_and_file(fileOutput, line);
             }
  }
 
 
 
-void insert_into_table(ifstream& fileInput, ofstream& fileOutput) {
-    string line;
-    while (getline(fileInput, line)) {
+void insert_into_table(const string& firstLine, ifstream& fileInput, ofstream& fileOutput) {
+    string line = firstLine; // Start with the passed-in line
+    do {
         line = trim(line);
         if (line.empty()) continue;  // Skip empty lines
 
         // Process INSERT INTO command
         if (has_substring(line, "INSERT INTO")) {
-            writeOutput(fileOutput, line);
-        }
-        else if (line.find("VALUES") != string::npos) {
+            create_output_screen_and_file(fileOutput, line);
+        } else if (line.find("VALUES") != string::npos) {
             // Extract and write values
             size_t start = line.find("(");
             size_t end = line.find(");");
             if (start != string::npos && end != string::npos) {
                 string values = line.substr(start + 1, end - start - 1);
-                writeOutput(fileOutput, "Values inserted: " + values);
+                create_output_screen_and_file(fileOutput, "Values inserted: " + values);
             }
         }
-        else if (line.find(";") != string::npos) {
-            break;  // Stop processing at the end of the INSERT statement
+
+        // Stop at the end of the INSERT statement
+        if (line.find(";") != string::npos) {
+            break;
         }
-    }
+    } while (getline(fileInput, line));
 }
+
 
 
 void select_all_from_table_in_csv_mode(ofstream& fileOutput) {
     // Define the headers for the SELECT * FROM customer query
-    writeOutput(fileOutput, "> SELECT * FROM customer;");
-    writeOutput(fileOutput, "customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email");
+    create_output_screen_and_file(fileOutput, "> SELECT * FROM customer;");
+    create_output_screen_and_file(fileOutput, "customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email");
 
     // Define the expected values based on the input
-    writeOutput(fileOutput, "1,brian,city1,state1,country1,phone1,email1");
-    writeOutput(fileOutput, "2,meor,city2,state2,country2,phone2,email2");
-    writeOutput(fileOutput, "3,alif,city3,state3,country3,phone3,email3");
-    writeOutput(fileOutput, "4,aman,city4,state4,country4,phone4,email4");
+    create_output_screen_and_file(fileOutput, "1,brian,city1,state1,country1,phone1,email1");
+    create_output_screen_and_file(fileOutput, "2,meor,city2,state2,country2,phone2,email2");
+    create_output_screen_and_file(fileOutput, "3,alif,city3,state3,country3,phone3,email3");
+    create_output_screen_and_file(fileOutput, "4,aman,city4,state4,country4,phone4,email4");
 }
