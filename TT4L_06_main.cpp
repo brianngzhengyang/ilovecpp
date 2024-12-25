@@ -153,10 +153,14 @@ void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName,v
 
 void insert_into_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table) {
     if (line.find("INSERT INTO") != string::npos) {
+        size_t pos = line.find("INSERT INTO ");
+
+        // Remove the "INSERT INTO " part from the line
+        string modifiedLine = line.substr(pos + string("INSERT INTO ").length());
+
         size_t valuesPos = line.find("VALUES (");
         if (valuesPos != string::npos) {
             string values = line.substr(valuesPos + 8); // Extract values after "VALUES ("
-
             // Remove trailing ')' and ';'
             while (!values.empty() && (values.back() == ')' || values.back() == ';')) {
                 values.pop_back();
@@ -176,7 +180,8 @@ void insert_into_table(const string& line, ofstream& fileOutput, vector<vector<s
             }
             // Add the row data to the table
             table.push_back(rowData);
-            create_output_screen_and_file(fileOutput, "> " + line);
+            create_output_screen_and_file(fileOutput, "> INSERT INTO ");
+            create_output_screen_and_file(fileOutput, modifiedLine);
         }
     }
 }
