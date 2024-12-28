@@ -12,7 +12,7 @@
 // Task Distribution
 // Member_1:
 // Member_2: create_table(), writeOutput()
-// Member_3:
+// Member_3: void create_output_screen_and_file(), void create_database()
 // Member_4:
 // *********************************************************
 
