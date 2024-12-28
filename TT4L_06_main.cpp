@@ -10,26 +10,28 @@
 // Member_4: 1231300581 | MOHAMMED AMAN | 1231300581@student.mmu.edu.my | 011-39843157
 // *********************************************************
 // Task Distribution
-// Member_1:
-// Member_2: create_table(), writeOutput()
-// Member_3: void create_output_screen_and_file(), void create_database()
-// Member_4:
+// Member_1: create_table()
+// Member_2: insert_into_table(), trim()
+// Member_3: create_database(); select_all_from_table_in_csv_mode()
+// Member_4: create_output_screen_and_file()
 // *********************************************************
 
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 using namespace std;
 
 // function prototypes
 bool has_substring(const string& line, const string& substring);
-void create_output_screen_and_file();
+void create_output_screen_and_file(ofstream& fileOutput, const string& content);
 void create_database();
-void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName);
-void insert_into_table(ifstream& fileInput, ofstream& fileOutput);
-void select_all_from_table_in_csv_mode(ofstream& fileOutput);
+void insert_into_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table);
+void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName, vector<vector<string>>& table);
+void select_all_from_table_in_csv_mode(ofstream& fileOutput, vector<vector<string>>& table);
+
 
 // Function to trim spaces from a string
 string trim(const string& str) {
@@ -39,12 +41,13 @@ string trim(const string& str) {
 }
 
 // Function to write output to both file and console
-void writeOutput(ofstream& fileOutput, const string& content) {
-    fileOutput << "> " << content << endl;
-    cout << "> " << content << endl;
+void create_output_screen_and_file(ofstream& fileOutput, const string& content) {
+    fileOutput << content << endl;
+    cout << content << endl;
 }
 
 int main() {
+
     string fileOutputName;
     ofstream fileOutput(fileOutputName);
 
@@ -53,7 +56,7 @@ int main() {
 
     ifstream fileInput;
 
-    string fileInputName = "C:\\Users\\brian\\Desktop\\ilovecpp\\fileInput1.mdb";
+    string fileInputName = "C:\\mariadb\\fileInput1.mdb";
 
     fileInput.open(fileInputName);
 
@@ -72,9 +75,11 @@ int main() {
     string line;
     while (getline(fileInput, line)) {
         line = trim(line);  // Trim spaces from each line
+
+
         if (has_substring(line, "CREATE TABLE"))
         {
-            writeOutput(fileOutput, line);
+            create_output_screen_and_file(fileOutput, "> " + line);
 
             // Extract the table name
             size_t pos = line.find("CREATE TABLE");
@@ -83,24 +88,27 @@ int main() {
                 tableName = trim(tableName);  // Trim spaces from the table name
             }
 
-            create_table(fileInput, fileOutput, tableName);
+            create_table(fileInput, fileOutput, tableName, table);
         }
         else if (has_substring(line, "CREATE"))
         {
             fileOutputName = "fileOutput1.txt";
-            cout << "> CREATE "<< fileOutputName << ";" << endl;
+            create_output_screen_and_file(fileOutput, "> CREATE " + fileOutputName + ";" );
         }
         else if (has_substring(line, "DATABASES;") )
         {
-            writeOutput(fileOutput, fileInputName);
+            create_output_screen_and_file(fileOutput,"> " + line);
+            create_output_screen_and_file(fileOutput, fileInputName);
         }
         else if (has_substring(line, "INSERT INTO")) {
-            insert_into_table(fileInput, fileOutput);
+            insert_into_table(line, fileOutput, table);
         }
         else if (has_substring(line, "SELECT * FROM")) {
-            select_all_from_table_in_csv_mode(fileOutput);
+            create_output_screen_and_file(fileOutput, "> " + line);
+            select_all_from_table_in_csv_mode(fileOutput, table);
         }
     }
+
 
     fileInput.close();
     fileOutput.close();
@@ -108,56 +116,101 @@ int main() {
 }
 
 // function definitions
-bool has_substring(const string& line, const string& substring) {
-    return line.find(substring) != string::npos;
+bool has_substring(const string& line, const string& substring)
+{
+    if (line.find(substring) != string:: npos)
+    {
+      return true; // substring found
+    }
+    else
+    {
+        return false; // substring not found
+    }
 }
 
-void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName) {
+void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName,vector<vector<string>>& table)
+{
     string line;
     vector<string> columnHeaders;
 
     // Read the file line by line
-    while (getline(fileInput, line)) {
-        line = trim(line);  // Trim spaces from the line
+    while (getline(fileInput, line))
+        {
+            line = trim(line);  // Trim spaces from the line
 
-                if (line.find("TABLES;") != string::npos) {
-
-                    writeOutput(fileOutput, line);
-                    writeOutput(fileOutput, tableName);
-                    break;
-                }
-
-                // Store and write each column definition line
-                columnHeaders.push_back(line.substr(0, line.find(" ")));
-                writeOutput(fileOutput, line);
+            if (line.find(")") != string::npos) {  // End of table definition
+                create_output_screen_and_file(fileOutput,line);  // Write the closing part of the table definition
+                break;
             }
- }
-
-
-
-void insert_into_table(ifstream& fileInput, ofstream& fileOutput) {
-    string line;
-
-    while (getline(fileInput, line)) {
-        line = trim(line);
-
-        if (has_substring(line, "INSERT INTO")) {
-            writeOutput(fileOutput, line);
+            string columnName = line.substr(0, line.find(" "));  // Get the column name (before first space)
+            columnHeaders.push_back(columnName);  // Store the column name
+            create_output_screen_and_file(fileOutput, line);  // Write each column definition
         }
-        else if (line.find(");") != string::npos) {
-            break;  // Stop when the closing parentheses is found
+        table.push_back(columnHeaders);  // Store column headers as the first row in the table
+        create_output_screen_and_file(fileOutput, "> TABLES;");
+        create_output_screen_and_file(fileOutput, tableName);
+    }
+
+void insert_into_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table) {
+    if (line.find("INSERT INTO") != string::npos) {
+        size_t pos = line.find("INSERT INTO ");
+
+        // Remove the "INSERT INTO " part from the line
+        string modifiedLine = line.substr(pos + string("INSERT INTO ").length());
+
+        size_t valuesPos = line.find("VALUES (");
+        if (valuesPos != string::npos) {
+            string values = line.substr(valuesPos + 8); // Extract values after "VALUES ("
+            // Remove trailing ')' and ';'
+            while (!values.empty() && (values.back() == ')' || values.back() == ';')) {
+                values.pop_back();
+            }
+
+            // Split the values by commas and store each value as a separate entry in the row
+            vector<string> rowData;
+            stringstream ss(values);
+            string value;
+            while (getline(ss, value, ',')) {
+                value = trim(value); // Trim spaces from each value
+                // Remove single quotes around string values like emails
+                if (!value.empty() && value.front() == '\'' && value.back() == '\'') {
+                    value = value.substr(1, value.length() - 2); // Remove single quotes
+                }
+                rowData.push_back(value); // Add the cleaned value to the row
+            }
+            // Add the row data to the table
+            table.push_back(rowData);
+            create_output_screen_and_file(fileOutput, "> INSERT INTO ");
+            create_output_screen_and_file(fileOutput, modifiedLine);
         }
     }
 }
 
-void select_all_from_table_in_csv_mode(ofstream& fileOutput) {
-    // Define the headers for the SELECT * FROM customer query
-    writeOutput(fileOutput, "> SELECT * FROM customer;");
-    writeOutput(fileOutput, "customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email");
+void select_all_from_table_in_csv_mode(ofstream& fileOutput, vector<vector<string>>& table) {
+  // Output the column headers
+  string headerLine = "";
+  for (size_t i = 0; i < table[0].size(); ++i) {
+    if (i > 0) {
+      headerLine += ",";
+    }
+    headerLine += table[0][i];
+  }
+  create_output_screen_and_file(fileOutput, headerLine);
 
-    // Define the expected values based on the input
-    writeOutput(fileOutput, "1,brian,city1,state1,country1,phone1,email1");
-    writeOutput(fileOutput, "2,meor,city2,state2,country2,phone2,email2");
-    writeOutput(fileOutput, "3,alif,city3,state3,country3,phone3,email3");
-    writeOutput(fileOutput, "4,aman,city4,state4,country4,phone4,email4");
+  // Output each row stored in table
+  for (size_t i = 1; i < table.size(); ++i) {
+    string rowLine = "";
+    for (size_t j = 0; j < table[i].size(); ++j) {
+      if (!rowLine.empty()) rowLine += ",";
+      rowLine += table[i][j];
+    }
+    create_output_screen_and_file(fileOutput, rowLine);
+  }
 }
+
+
+
+
+
+
+
