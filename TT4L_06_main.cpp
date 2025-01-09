@@ -4,7 +4,7 @@
 // Lecture Class: TC2L
 // Tutorial Class: TT4L
 // Trimester: 2430
-// Member_1: 242UC244PU | MEOR HAZIMI BIN MEOR MOHAMMAD FARED | meor.hazimi.meor@student.mmu.edu.my | 019-7521755
+// Member_1: 242UC244PU | MEOR HAZIMI BIN MEOR MOHAMMAD FARED | MEOR.HAZIMI.MEOR@student.mmu.edu.my | 019-7521755
 // Member_2: 242UC244RD | BRIAN NG ZHENG YANG | BRIAN.NG.ZHENG@student.mmu.edu.my | 017-7793199
 // Member_3: 242UC244L7 | ALIF AKMAL BIN ABDUL HALIM | ALIF.AKMAL.ABDUL@student.mmu.edu.my  | 018-3555944
 // Member_4: 1231300581 | MOHAMMED AMAN | 1231300581@student.mmu.edu.my | 011-39843157
@@ -56,7 +56,9 @@ int main() {
 
     ifstream fileInput;
 
-    string fileInputName = "C:\\mariadb\\fileInput1.mdb";
+    //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput1.mdb";
+    //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput2.mdb";
+    string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput3.mdb";
 
     fileInput.open(fileInputName);
 
@@ -65,7 +67,9 @@ int main() {
         exit(-1);
     }
 
-    fileOutput.open("fileOutput1.txt");
+    //fileOutput.open("fileOutput1.txt");
+    //fileOutput.open("fileOutput2.txt");
+    fileOutput.open("fileOutput3.txt");
 
     if (!fileOutput.is_open()) {
         cout << "Unable to open output file" << endl;
@@ -92,7 +96,9 @@ int main() {
         }
         else if (has_substring(line, "CREATE"))
         {
-            fileOutputName = "fileOutput1.txt";
+            //fileOutputName = "fileOutput1.txt";
+            //fileOutputName = "fileOutput2.txt";
+            fileOutputName = "fileOutput3.txt";
             create_output_screen_and_file(fileOutput, "> CREATE " + fileOutputName + ";" );
         }
         else if (has_substring(line, "DATABASES;") )

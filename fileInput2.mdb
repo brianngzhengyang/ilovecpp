@@ -9,14 +9,9 @@
  customer_phone TEXT,
  customer_email TEXT
  );
- INSERT INTO customer(customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (1,'name1','city1','state1','country1','phone1','email1');
- INSERT INTO customer(customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (2,'name2','city2','state2','country2','phone2','email2');
- INSERT INTO customer(customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (3,'name3','city3','state3','country3','phone3','email3');
- INSERT INTO customer(customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (4,'name4','city4','state4','country4','phone4','email4');
- SELECT * FROM customer;
  TABLES;
- UPDATE customer SET customer_email='email333' WHERE customer_id=3;  
+ INSERT INTO customer(customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (1,'Alif','Shah Alam','Selangor','Malaysia','018-3555944','ALIF.AKMAL.ABDUL@student.mmu.edu.my');
+ INSERT INTO customer(customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (2,'Brian','Puchong','Selangor','Malaysia','017-7793199','BRIAN.NG.ZHENG@student.mmu.edu.my');
+ INSERT INTO customer(customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (3,'Meor','Shah Alam','Selangor','Malaysia','019-7521755','MEOR.HAZIMI.MEOR@student.mmu.edu.my');
+ INSERT INTO customer(customer_id,customer_name,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (4,'Aman','Puchong','Selangor','Malaysia','011-39843157','1231300581@student.mmu.edu.my');
  SELECT * FROM customer;
- DELETE FROM customer WHERE customer_id=4;
- SELECT * FROM customer;
- SELECT COUNT(*) FROM customer;
