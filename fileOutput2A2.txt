@@ -1,6 +1,5 @@
-> CREATE fileOutput2A2.txt;
 > DATABASES;
-C:\Users\Meor Hazimi\OneDrive\Desktop\ilovecpp\fileInput2A2.mdb
+fileInput2A2.mdb
 > CREATE TABLE customer(
 customer_id INT,
 customer_name TEXT,

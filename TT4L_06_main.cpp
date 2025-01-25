@@ -27,7 +27,7 @@ using namespace std;
 // function prototypes
 bool has_substring(const string& line, const string& substring);
 void create_output_screen_and_file(ofstream& fileOutput, const string& content);
-void create_database();
+void create_database(ofstream& fileOutput);
 void insert_into_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table);
 void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName, vector<vector<string>>& table);
 void select_all_from_table_in_csv_mode(ofstream& fileOutput, vector<vector<string>>& table);
@@ -66,25 +66,13 @@ int main()
     //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput2.mdb";
     //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput3.mdb";
     //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput1A2.mdb";
-    string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput2A2.mdb";
+    string fileInputName = "fileInput2A2.mdb";
 
     fileInput.open(fileInputName);
 
     if (!fileInput.is_open())
     {
         cout << "Unable to open input file" << endl;
-        exit(-1);
-    }
-
-    //fileOutput.open("fileOutput1.txt");
-    //fileOutput.open("fileOutput2.txt");
-    //fileOutput.open("fileOutput3.txt");
-    //fileOutput.open("fileOutput1A2.txt");
-    fileOutput.open("fileOutput2A2.txt");
-
-    if (!fileOutput.is_open())
-    {
-        cout << "Unable to open output file" << endl;
         exit(-1);
     }
 
@@ -119,6 +107,7 @@ int main()
         }
         else if (has_substring(line, "DATABASES;") )
         {
+            create_database(fileOutput);
             create_output_screen_and_file(fileOutput,"> " + line);
             create_output_screen_and_file(fileOutput, fileInputName);
         }
@@ -164,6 +153,17 @@ bool has_substring(const string& line, const string& substring)
     else
     {
         return false; // substring not found
+    }
+}
+
+void create_database(ofstream& fileOutput)
+{
+    fileOutput.open("fileOutput2A2.txt");
+
+    if (!fileOutput.is_open())
+    {
+        cout << "Unable to open output file" << endl;
+        exit(-1);
     }
 }
 
