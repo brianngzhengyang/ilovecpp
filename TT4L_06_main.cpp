@@ -107,7 +107,7 @@ int main()
         }
         else if (has_substring(line, "DATABASES;") )
         {
-            create_database(fileOutput);
+            create_database(fileOutput); // create the text file database
             create_output_screen_and_file(fileOutput,"> " + line);
             create_output_screen_and_file(fileOutput, fileInputName);
         }
@@ -134,6 +134,11 @@ int main()
         {
             create_output_screen_and_file(fileOutput, "> " + line);
             count_from_table(line, fileOutput, table);
+        }
+        else if (has_substring(line, "TABLES"))
+        {
+            create_output_screen_and_file(fileOutput, "> TABLES;");
+            create_output_screen_and_file(fileOutput, tableName);
         }
     }
 
@@ -187,8 +192,6 @@ void create_table(ifstream& fileInput, ofstream& fileOutput, string& tableName,v
         create_output_screen_and_file(fileOutput, line);  // Write each column definition
     }
     table.push_back(columnHeaders);  // Store column headers as the first row in the table
-    create_output_screen_and_file(fileOutput, "> TABLES;");
-    create_output_screen_and_file(fileOutput, tableName);
 }
 
 void insert_into_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table)
