@@ -1,6 +1,6 @@
 CREATE fileOutput2.txt;
 DATABASES;
-CREATE TABLE student(  -- Table name changed to student
+CREATE TABLE student(  
 student_id INT,
 student_name TEXT,
 student_city TEXT,
