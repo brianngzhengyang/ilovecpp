@@ -1,27 +1,27 @@
 CREATE fileOutput3.txt;
 DATABASES;
-CREATE TABLE customer(
-customer_id INT,
-customer_name TEXT,
-customer_age INT,
-customer_race TEXT,
-customer_city TEXT,
-customer_state TEXT,
-customer_country TEXT,
-customer_phone TEXT,
-customer_email TEXT
+CREATE TABLE teammate(  -- Table name changed to teammate
+teammate_id INT,
+teammate_name TEXT,
+teammate_age INT,
+teammate_race TEXT,
+teammate_city TEXT,
+teammate_state TEXT,
+teammate_country TEXT,
+teammate_phone TEXT,
+teammate_email TEXT
 );
 TABLES;
-INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (1,'Alif',20,'Malay','Shah Alam','Selangor','Malaysia','018-3555944','ALIF.AKMAL.ABDUL@student.mmu.edu.my');
-INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (2,'Brian',20,'Chinese','Puchong','Selangor','Malaysia','017-7793199','BRIAN.NG.ZHENG@student.mmu.edu.my');
-INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (3,'Meor',20,'Malay','Shah Alam','Selangor','Malaysia','019-7521755','MEOR.HAZIMI.MEOR@student.mmu.edu.my');
-INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (4,'Aman',20,'Indian','Puchong','Selangor','Malaysia','011-39843157','1231300581@student.mmu.edu.my');
-SELECT * FROM customer;
-UPDATE customer SET customer_age=23 WHERE customer_id=4;
-UPDATE customer SET customer_city='Jenjarom' WHERE customer_id=1;
-UPDATE customer SET customer_name='Hazimi' WHERE customer_id=3;
-SELECT * FROM customer;
-DELETE FROM customer WHERE customer_id=1;
-DELETE FROM customer WHERE customer_id=4;
-SELECT * FROM customer;
-SELECT COUNT(*) FROM customer;
+INSERT INTO teammate(teammate_id,teammate_name,teammate_age,teammate_race,teammate_city,teammate_state,teammate_country,teammate_phone,teammate_email) VALUES (1,'Alif',20,'Malay','Shah Alam','Selangor','Malaysia','018-3555944','ALIF.AKMAL.ABDUL@student.mmu.edu.my');
+INSERT INTO teammate(teammate_id,teammate_name,teammate_age,teammate_race,teammate_city,teammate_state,teammate_country,teammate_phone,teammate_email) VALUES (2,'Brian',20,'Chinese','Puchong','Selangor','Malaysia','017-7793199','BRIAN.NG.ZHENG@student.mmu.edu.my');
+INSERT INTO teammate(teammate_id,teammate_name,teammate_age,teammate_race,teammate_city,teammate_state,teammate_country,teammate_phone,teammate_email) VALUES (3,'Meor',20,'Malay','Shah Alam','Selangor','Malaysia','019-7521755','MEOR.HAZIMI.MEOR@student.mmu.edu.my');
+INSERT INTO teammate(teammate_id,teammate_name,teammate_age,teammate_race,teammate_city,teammate_state,teammate_country,teammate_phone,teammate_email) VALUES (4,'Aman',20,'Indian','Puchong','Selangor','Malaysia','011-39843157','1231300581@student.mmu.edu.my');
+SELECT * FROM teammate;
+UPDATE teammate SET teammate_age=23 WHERE teammate_id=4;
+UPDATE teammate SET teammate_city='Jenjarom' WHERE teammate_id=1;
+UPDATE teammate SET teammate_name='Hazimi' WHERE teammate_id=3;
+SELECT * FROM teammate;
+DELETE FROM teammate WHERE teammate_id=1;
+DELETE FROM teammate WHERE teammate_id=4;
+SELECT * FROM teammate;
+SELECT COUNT(*) FROM teammate;

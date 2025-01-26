@@ -34,6 +34,7 @@ void select_all_from_table_in_csv_mode(ofstream& fileOutput, vector<vector<strin
 void update_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table);
 void delete_from_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table);
 void count_from_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table);
+string trim(const string& str);
 
 int main()
 {
@@ -47,7 +48,7 @@ int main()
     ifstream fileInput;
 
     //string fileInputName = "fileInput1.mdb";
-    //string fileInputName = "fileInput2.mdb";
+//    string fileInputName = "fileInput2.mdb";
     string fileInputName = "fileInput3.mdb";
 
     fileInput.open(fileInputName);
@@ -81,7 +82,7 @@ int main()
         else if (has_substring(line, "CREATE"))
         {
             //fileOutputName = "fileOutput1.txt";
-            //fileOutputName = "fileOutput2.txt";
+//            fileOutputName = "fileOutput2.txt";
             fileOutputName = "fileOutput3.txt";
 
             create_output_screen_and_file(fileOutput, "> CREATE " + fileOutputName + ";" );
