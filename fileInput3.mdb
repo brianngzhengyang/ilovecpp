@@ -1,6 +1,6 @@
 CREATE fileOutput3.txt;
 DATABASES;
-CREATE TABLE teammate(  -- Table name changed to teammate
+CREATE TABLE teammate(  
 teammate_id INT,
 teammate_name TEXT,
 teammate_age INT,
