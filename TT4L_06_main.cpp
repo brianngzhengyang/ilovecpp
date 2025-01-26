@@ -10,10 +10,10 @@
 // Member_4: 1231300581 | MOHAMMED AMAN | 1231300581@student.mmu.edu.my | 011-39843157
 // *********************************************************
 // Task Distribution
-// Member_1: create_database(); select_all_from_table_in_csv_mode()
-// Member_2: insert_into_table(), trim()
-// Member_3: create_table()
-// Member_4: create_output_screen_and_file()
+// Member_1: create_database(), select_all_from_table_in_csv_mode()
+// Member_2: insert_into_table(), trim(), delete_from_table()
+// Member_3: create_table(), update_table()
+// Member_4: create_output_screen_and_file(), count_from_table()
 // *********************************************************
 
 
