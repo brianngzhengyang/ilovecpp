@@ -1,19 +1,27 @@
- CREATE fileOutput3.txt;
- DATABASES;
- CREATE TABLE customer(
- customer_id INT,
- customer_name TEXT,
- customer_age INT,
- customer_race TEXT,
- customer_city TEXT,
- customer_state TEXT,
- customer_country TEXT,
- customer_phone TEXT,
- customer_email TEXT
- );
- TABLES;
- INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (1,'Alif',20,'Malay,'Shah Alam','Selangor','Malaysia','018-3555944','ALIF.AKMAL.ABDUL@student.mmu.edu.my');
- INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (2,'Brian',20,'Chinese','Puchong','Selangor','Malaysia','017-7793199','BRIAN.NG.ZHENG@student.mmu.edu.my');
- INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (3,'Meor',20,'Malay','Shah Alam','Selangor','Malaysia','019-7521755','MEOR.HAZIMI.MEOR@student.mmu.edu.my');
- INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (4,'Aman',20,'Indian','Puchong','Selangor','Malaysia','011-39843157','1231300581@student.mmu.edu.my');
- SELECT * FROM customer;
+CREATE fileOutput3.txt;
+DATABASES;
+CREATE TABLE customer(
+customer_id INT,
+customer_name TEXT,
+customer_age INT,
+customer_race TEXT,
+customer_city TEXT,
+customer_state TEXT,
+customer_country TEXT,
+customer_phone TEXT,
+customer_email TEXT
+);
+TABLES;
+INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (1,'Alif',20,'Malay','Shah Alam','Selangor','Malaysia','018-3555944','ALIF.AKMAL.ABDUL@student.mmu.edu.my');
+INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (2,'Brian',20,'Chinese','Puchong','Selangor','Malaysia','017-7793199','BRIAN.NG.ZHENG@student.mmu.edu.my');
+INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (3,'Meor',20,'Malay','Shah Alam','Selangor','Malaysia','019-7521755','MEOR.HAZIMI.MEOR@student.mmu.edu.my');
+INSERT INTO customer(customer_id,customer_name,customer_age,customer_race,customer_city,customer_state,customer_country,customer_phone,customer_email) VALUES (4,'Aman',20,'Indian','Puchong','Selangor','Malaysia','011-39843157','1231300581@student.mmu.edu.my');
+SELECT * FROM customer;
+UPDATE customer SET customer_age=23 WHERE customer_id=4;
+UPDATE customer SET customer_city='Jenjarom' WHERE customer_id=1;
+UPDATE customer SET customer_name='Hazimi' WHERE customer_id=3;
+SELECT * FROM customer;
+DELETE FROM customer WHERE customer_id=1;
+DELETE FROM customer WHERE customer_id=4;
+SELECT * FROM customer;
+SELECT COUNT(*) FROM customer;
