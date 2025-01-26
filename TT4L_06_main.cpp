@@ -4,15 +4,15 @@
 // Lecture Class: TC2L
 // Tutorial Class: TT4L
 // Trimester: 2430
-// Member_1: 242UC244PU | MEOR HAZIMI BIN MEOR MOHAMMAD FARED | MEOR.HAZIMI.MEOR@student.mmu.edu.my | 019-7521755
+// Member_1: 242UC244L7 | ALIF AKMAL BIN ABDUL HALIM | ALIF.AKMAL.ABDUL@student.mmu.edu.my  | 018-3555944
 // Member_2: 242UC244RD | BRIAN NG ZHENG YANG | BRIAN.NG.ZHENG@student.mmu.edu.my | 017-7793199
-// Member_3: 242UC244L7 | ALIF AKMAL BIN ABDUL HALIM | ALIF.AKMAL.ABDUL@student.mmu.edu.my  | 018-3555944
+// Member_3: 242UC244PU | MEOR HAZIMI BIN MEOR MOHAMMAD FARED | MEOR.HAZIMI.MEOR@student.mmu.edu.my | 019-7521755
 // Member_4: 1231300581 | MOHAMMED AMAN | 1231300581@student.mmu.edu.my | 011-39843157
 // *********************************************************
 // Task Distribution
-// Member_1: create_table()
+// Member_1: create_database(); select_all_from_table_in_csv_mode()
 // Member_2: insert_into_table(), trim()
-// Member_3: create_database(); select_all_from_table_in_csv_mode()
+// Member_3: create_table()
 // Member_4: create_output_screen_and_file()
 // *********************************************************
 
@@ -62,11 +62,9 @@ int main()
 
     ifstream fileInput;
 
-    //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput1.mdb";
-    //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput2.mdb";
-    //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput3.mdb";
-    //string fileInputName = "C:\\Users\\Meor Hazimi\\OneDrive\\Desktop\\ilovecpp\\fileInput1A2.mdb";
-    string fileInputName = "fileInput2A2.mdb";
+    //string fileInputName = "fileInput1.mdb";
+    //string fileInputName = "fileInput2.mdb";
+    string fileInputName = "fileInput3.mdb";
 
     fileInput.open(fileInputName);
 
@@ -100,9 +98,8 @@ int main()
         {
             //fileOutputName = "fileOutput1.txt";
             //fileOutputName = "fileOutput2.txt";
-            //fileOutputName = "fileOutput3.txt";
-            //fileOutputName = "fileOutput1A2.txt";
-            fileOutputName = "fileOutput2A2.txt";
+            fileOutputName = "fileOutput3.txt";
+
             create_output_screen_and_file(fileOutput, "> CREATE " + fileOutputName + ";" );
         }
         else if (has_substring(line, "DATABASES;") )
@@ -163,7 +160,9 @@ bool has_substring(const string& line, const string& substring)
 
 void create_database(ofstream& fileOutput)
 {
-    fileOutput.open("fileOutput2A2.txt");
+    //fileOutput.open("fileOutput1.txt");
+    //fileOutput.open("fileOutput2.txt");
+    fileOutput.open("fileOutput3.txt");
 
     if (!fileOutput.is_open())
     {
