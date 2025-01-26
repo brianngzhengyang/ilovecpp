@@ -35,22 +35,6 @@ void update_table(const string& line, ofstream& fileOutput, vector<vector<string
 void delete_from_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table);
 void count_from_table(const string& line, ofstream& fileOutput, vector<vector<string>>& table);
 
-
-// Function to trim spaces from a string
-string trim(const string& str)
-{
-    size_t first = str.find_first_not_of(" ");
-    size_t last = str.find_last_not_of(" ");
-    return (first == string::npos || last == string::npos) ? "" : str.substr(first, last - first + 1);
-}
-
-// Function to write output to both file and console
-void create_output_screen_and_file(ofstream& fileOutput, const string& content)
-{
-    fileOutput << content << endl;
-    cout << content << endl;
-}
-
 int main()
 {
 
@@ -146,6 +130,24 @@ int main()
 }
 
 // function definitions
+
+// Function to trim spaces from a string
+string trim(const string& str)
+{
+    size_t first = str.find_first_not_of(" ");
+    size_t last = str.find_last_not_of(" ");
+    return (first == string::npos || last == string::npos) ? "" : str.substr(first, last - first + 1);
+    // Check if both first and last non-space positions are valid; return the trimmed substring
+}
+
+// Function to write output to both file and console
+void create_output_screen_and_file(ofstream& fileOutput, const string& content)
+{
+    fileOutput << content << endl;
+    cout << content << endl;
+}
+
+
 bool has_substring(const string& line, const string& substring)
 {
     if (line.find(substring) != string:: npos)
